@@ -1,0 +1,29 @@
+
+baudrate=115200
+bootcmd=if mmc rescan ${mmcdev}; then if userbutton; then setenv bootenv user.txt;fi;echo SD/MMC found on device ${mmcdev};if run loadbootenv; then echo Loaded environment from ${bootenv};run importbootenv;fi;if test -n $uenvcmd; then echo Running uenvcmd ...;run uenvcmd;fi;if run loaduimage; then run mmcboot;fi;fi;
+
+loadaddr=0x80007fc0
+bootdelay=3
+bootenv=uEnv.txt
+
+console="tty0 console=ttyO0,115200n8"
+importbootenv=echo Importing environment from mmc ...; env import -t $loadaddr $filesize
+loadbootenv=fatload mmc ${mmcdev} ${loadaddr} ${bootenv}
+loaduimage=ext2load mmc ${mmcdev}:2 ${loadaddr} uImage
+loaduimagefat=fatload mmc ${mmcdev} ${loadaddr} uImage
+mmcargs=setenv bootargs console=${console} ${optargs} omapfb.mode=${dvimode} omapdss.def_disp=${defaultdisplay} root=${mmcroot} rootfstype=${mmcrootfstype}
+mmcboot=echo Booting from mmc ...; run mmcargs; 
+#bootm ${loadaddr}
+mmcdev=0
+mmcroot=/dev/mmcblk0p2 rw rootwait
+mmcrootfstype=ext3 
+
+
+serverip=192.168.3.109
+ipaddr=192.168.3.45
+netmask=255.255.255.0
+gatewayip=
+hostname=beagleBBB
+bootfile=uImage
+#booting from mmc
+uenvcmd=echo Loading kernel from mmc ...; run loaduimagefat; run mmcboot

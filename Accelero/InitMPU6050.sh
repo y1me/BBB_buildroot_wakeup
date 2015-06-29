@@ -1,4 +1,6 @@
-if echo cat /sys/devices/bone_capemgr.9/slots | egrep -q I2C1; then echo "I2C bus 1 pins already configure"
+#! /bin/sh
+
+if cat /sys/devices/bone_capemgr.9/slots | egrep -q I2C1; then echo "I2C bus 1 pins already configure"
 else
 	echo BB-I2C1 > /sys/devices/bone_capemgr.9/slots
 	cat /sys/devices/bone_capemgr.9/slots
